@@ -1,12 +1,5 @@
 # T-504-ITML-Project-1
 
-## Getting started
-Create a virtual environment
-Activate virtual environment
-Install requirements 
-pip install -r requirements.txt
-### 13-level codebook
-https://www.icpsr.umich.edu/web/NAHDAP/studies/34085/datasets/0001/variables/AGEG5YR?archive=NAHDAP
 
 # Diabetes Prediction Project
 
