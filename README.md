@@ -46,3 +46,18 @@ Follow the instructions below to get started.
     ```bash
     pip install -r requirements.txt
     ```
+4. **Run the Project:**
+
+    Once the environment is set up, run your code:
+    ```bash
+    python predict_diabetes.ipynb
+    ```
+
+## Known Issues
+While trying to run this project we stumbled on an issue with libomp (https://openmp.llvm.org) on macos. The error surficed while trying to run the machine learning models in PyCaret (e.g., issues related to OpenMP). The issue was solved by installing libomp via homebrew:
+
+```bash
+brew install libomp
+````
+
+Hopefully this helps if you encounter the same issue.
