@@ -6,10 +6,13 @@
 \usepackage{amssymb}
 \usepackage{hyperref}
 \usepackage{geometry}
-\geometry{a4paper, left=25mm, right=25mm, top=25mm, bottom=25mm}
+\usepackage{tabularx}
+\usepackage[backend=biber, style=numeric, sorting=none]{biblatex}
+\addbibresource{references.bib}
 
+\geometry{a4paper, left=25mm, right=25mm, top=25mm, bottom=25mm}
 \title{Project 1: Supervised Learning - Classification}
-\author{To be filled in}
+\author{Alexander Svarfdal Gudmundsson \and Jan Babin}
 \date{\today}
 
 \begin{document}
@@ -17,31 +20,124 @@
 \maketitle
 
 \begin{abstract}
-Placeholder
+Placeholder. We probably dont need an abstract since this is a report rather than a paper.
+// REMINDER TO JOIN A SUBMISSION GROUP ON CANVAS
 \end{abstract}
 
 \section{Introduction}
-Placeholder
+\subsection{Background}
+Diabetes is a chronic condition characterised by elevated blood sugar levels. While genetic factors 
+can play a role, a significant amount of diabetes Type 2 cases is associated with lifestyle choices. 
+According to the World Health Organization \cite{WHO2016}, 422 million people worldwide 
+are living with diabetes, with numbers continuing to rise. The societal impact of diabetes is 
+significant: a diminished quality of life and a higher risk of serious health complications which in 
+turn may lead to increased healthcare costs. Therefore, there is medical merit in
+early predictions of diabetes to refine treatment and management strategies.
 
-\begin{figure}[h]
-    \centering
-    % Platzhalter für die Abbildung
-    \includegraphics[width=0.5\textwidth]{cube.png}
-    \caption{Cube \( W = \{\mathbf{v}: v_x, v_y, v_z
-\in [0.25, 0.75] \} \) with center \( (0.5, 0.5, 0.5)^T\)}
-    \label{fig:Introduction}
-\end{figure}
+\subsection{Objective}
+The goal of this project is to build a machine learning model that can identify 
+patterns in lifestyle and demographic data associated with diabetes and thereby predict whether
+a given person has diabetes / is very likely do develop it. While the 
+model is purely intended for academic purpose, the project allows us to 
+explore how machine learning can be used to analyse health-related data and 
+provide insights into potential risk factors.
 
-Some formula:
-\[ \mathbf{-t} + (\mathbf{R_z} \cdot (\mathbf{t} + \mathbf{v} )) = 
-    (\mathbf{R_z}\mathbf{t} - \mathbf{t}) + (\mathbf{R_z}\mathbf{v})\]
+\subsection{Dataset}
+The dataset at hand, "Diabetes, Hypertension and Stroke Prediction," is from Kaggle and contains 
+health-related data in CSV format intended for predicting diabetes, hypertension and stroke. 
+For this project, we are solely focussing on diabetes. The dataset consists of 70,692 observations 
+and 18 attributes, some of which are outlined as follows (full overview \ref{tab:feature_list}):
+\begin{itemize}
+    \item \textbf{Age}: Coded in 13 age groups (e.g., 1.0 for 18-24, 2.0 for 25-29, etc.).
+    \item \textbf{Sex}: Binary variable representing male (0.0) and female (1.0).
+    \item \textbf{BMI}: Body Mass Index, a continuous variable.
+    \item \textbf{Lifestyle indicators}: Such as smoking status (whether the individual has smoked at least 100 cigarettes in their lifetime), physical activity in the past 30 days (excluding job-related activity), daily fruit and vegetable consumption, and heavy alcohol consumption (based on defined weekly limits for men and women).
+    \item \textbf{General health and mental/physical health}: Self-reported general health on a scale from 1 (excellent) to 5 (poor), along with the number of days with poor mental and physical health over the past 30 days.
+    \item \textbf{Pre-existing conditions}: Information on high cholesterol, coronary heart disease or myocardial infarction, and difficulty walking.
+\end{itemize}
 
+The target variable is \textbf{Diabetes}, which is represented as a binary category 
+(0.0 for no diabetes, 1.0 for diabetes). No missing or null values were identified in the dataset, 
+ensuring that data cleaning was minimal and straightforward. Furthermore, the dataset is perfectly 
+balanced, in that, 50\% of observations correspond to diabetes, the other 50\% do not.
 
 \section{Process}
-Placeholder
+The steps involved in the analysis follow a standard supervised machine learning pipeline, 
+from data preparation to model selection and evaluation.
 
-\subsection{Subparagraph}
-Placeholder
+\subsection{Data Loading and Exploration}
+The dataset was loaded into a pandas DataFrame. Initial exploration was conducted to understand 
+the structure of the data:
+\begin{itemize}
+    \item Data Integrity: We confirmed that the dataset contained no missing or null values.
+    \item Feature Exploration: The features were analysed for their unique values and data 
+    types, revealing that many variables were binary, and the rest were either categorical or 
+    continuous. Continuous variables included features like BMI, Age, MentHlth, and PhysHlth, 
+    while categorical variables included GenHlth (self-reported health scale from 1 to 5) 
+    and binary indicators for lifestyle factors like Smoking, Physical Activity, and Alcohol 
+    Consumption.
+\end{itemize}
+
+\subsection{Preprocessing}
+\subsubsection{One-Hot Encoding}
+WE SHOULD DISCUSS THIS AGAIN
+
+Since some categorical features (e.g., Sex, GenHlth) were non-numeric, one-hot encoding was 
+applied to convert these categories into numeric values:
+\begin{itemize}
+    \item Sex: Encoded as a binary variable with one-hot encoding and drop\_first=True to prevent
+    perfect multicollinearity (i.e., avoiding redundancy with one binary variable sufficing to 
+    represent gender).
+    \item GenHlth: This feature, originally a categorical variable on a scale from 1 to 5, 
+    was one-hot encoded to allow for better model interpretation and training.
+\end{itemize}
+
+\subsubsection{Scaling}
+Certain features with a wide range of values were standardized using StandardScaler. These included:
+BMI, MentHlth, PhysHlth, and Age: Standardization ensures that the models 
+(e.g., logistic regression, support vector machines) are not biased towards features with larger 
+numeric ranges. This is important for algorithms that rely on the magnitude of features during 
+decision-making.
+
+\subsubsection{Train-Test Split}
+WE MIGHT WANNA EXPLAIN HERE WHY WE CHOSE THIS SPLIT
+
+The dataset was split into a training set (80\%) and a test set (20\%) using train\_test\_split from 
+sklearn. Stratification was applied to ensure that the class distribution of the target variable 
+(Diabetes) remained balanced across the training and test sets.
+
+\subsection{Feature Correlation Analysis}
+To explore potential multicollinearity among features, a correlation matrix was generated using 
+Seaborn's heatmap function. The goal was to identify highly correlated features that could negatively 
+impact model performance by redundancy.
+
+Findings: The GenHlth and PhysHlth features exhibited some degree of linear correlation but it was
+not high enough to justify omitting one of two would outweigh having more features / data to train 
+on.
+WE MIGHT WANNA REFERENC SOMETHING REGARDING CORRELATION VALUES HERE 
+(when to throw away a feature / when not)
+
+\subsection{Model Selection and Evaluation}
+\subsubsection{PyCaret Experiment Setup}
+For model selection, we utilised PyCaret's ClassificationExperiment to quickly get a 
+comparison between multiple classification models. We then selected the 
+5 best performing models based on default hyperparameters to fine-tune further via hyperparameter
+optimisation.
+\\
+PyCaret’s built-in random grid-search was used to tune the hyperparameters of the selected models, 
+optimising for XXXXXXXX.
+
+\subsubsection{Model Stacking and Ensembling}
+Ensemble Methods: In an effort to improve prediction accuracy, ensemble learning methods were applied. 
+A hard voting ensemble (WHAT DOES THIS EXACTLY DO?) (blend\_models) was created using the 
+top-performing models.
+Stacking: A stacking model was also built, ..... 
+However, the stacking model did not outperform the ensemble.
+
+\subsection{Model Stacking and Ensembling}
+After experimenting with feature selection (also implemented via PyCaret), we found that applying 
+feature selection resulted in slightly lower model performance. Therefore, the final models were 
+built without this step.
 
 \section{Results}
 Placeholder
@@ -52,13 +148,39 @@ Placeholder
 \section{Future Work}
 Placeholder
 
-
 \clearpage
 
-\section{Sources}
+\appendix
+\section*{Appendix}
 
-\begin{itemize}
-    \item some source
-\end{itemize}
+\begin{table}[h!]
+    \centering
+    \begin{tabularx}{\textwidth}{|l|X|}
+    \hline
+    \textbf{Feature} & \textbf{Description} \\ \hline
+    Age & Coded in 13 age groups (e.g., 1: 18-24, 2: 25-29, etc.) \\ \hline
+    Sex & Sex of the individual (0: Male, 1: Female) \\ \hline
+    HighChol & High cholesterol (0: No, 1: Yes) \\ \hline
+    CholCheck & Checked cholesterol in the last 5 years (0: No, 1: Yes) \\ \hline
+    BMI & Body Mass Index (continuous variable) \\ \hline
+    Smoker & Smoked at least 100 cigarettes in their lifetime (0: No, 1: Yes) \\ \hline
+    HeartDiseaseorAttack & History of coronary heart disease or myocardial infarction (0: No, 1: Yes) \\ \hline
+    PhysActivity & Engaged in physical activity in the past 30 days, excluding work (0: No, 1: Yes) \\ \hline
+    Fruits & Consumes fruit 1 or more times per day (0: No, 1: Yes) \\ \hline
+    Veggies & Consumes vegetables 1 or more times per day (0: No, 1: Yes) \\ \hline
+    HvyAlcoholConsump & Heavy alcohol consumption (men: 14+ drinks/week, women: 7+ drinks/week) (0: No, 1: Yes) \\ \hline
+    GenHlth & Self-reported general health (1: Excellent, 2: Very good, 3: Good, 4: Fair, 5: Poor) \\ \hline
+    MentHlth & Days of poor mental health in the past 30 days (0 to 30) \\ \hline
+    PhysHlth & Days of poor physical health in the past 30 days (0 to 30) \\ \hline
+    DiffWalk & Difficulty walking or climbing stairs (0: No, 1: Yes) \\ \hline
+    Stroke & History of stroke (0: No, 1: Yes) \\ \hline
+    HighBP & High blood pressure (0: No, 1: Yes) \\ \hline
+    Diabetes & Presence of diabetes (0: No, 1: Yes) \\ \hline
+    \end{tabularx}
+    \caption{Full list of dataset features used in the analysis.}
+    \label{tab:feature_list}
+\end{table}
+
+\printbibliography
 
 \end{document}
