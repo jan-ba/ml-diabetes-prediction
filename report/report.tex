@@ -7,10 +7,16 @@
 \usepackage{hyperref}
 \usepackage{geometry}
 \usepackage{tabularx}
+\usepackage{float}
 \usepackage[backend=biber, style=numeric, sorting=none]{biblatex}
 \usepackage{booktabs}
 \usepackage{colortbl}
 \usepackage{xcolor}
+\usepackage{caption} % For customizing captions
+
+
+% Set the caption font size
+\captionsetup{font=small}
 
 
 \addbibresource{references.bib}
@@ -23,11 +29,6 @@
 \begin{document}
 
 \maketitle
-
-\begin{abstract}
-Placeholder. We probably dont need an abstract since this is a report rather than a paper.
-// REMINDER TO JOIN A SUBMISSION GROUP ON CANVAS
-\end{abstract}
 
 \section{Introduction}
 \subsection{Background}
@@ -51,20 +52,36 @@ provide insights into potential risk factors.
 The dataset at hand, "Diabetes, Hypertension and Stroke Prediction," is from Kaggle and contains 
 health-related data in CSV format intended for predicting diabetes, hypertension and stroke. 
 For this project, we are solely focussing on diabetes. The dataset consists of 70,692 observations 
-and 18 features, some of which are outlined as follows (full overview \ref{tab:feature_list}):
+and 18 features, some of which are outlined as follows (for a full overview, see Table \ref{tab:feature_list} in the Appendix):
 \begin{itemize}
-    \item \textbf{Age}: Coded in 13 age groups (e.g., 1.0 for 18-24, 2.0 for 25-29, etc.).
+    \item \textbf{Age}: Coded in 13 age groups (see Figure \ref{fig:age_groups}).
     \item \textbf{Sex}: Binary variable representing male (0.0) and female (1.0).
     \item \textbf{BMI}: Body Mass Index, a continuous variable.
-    \item \textbf{Lifestyle indicators}: Such as smoking status (whether the individual has smoked at least 100 cigarettes in their lifetime), physical activity in the past 30 days (excluding job-related activity), daily fruit and vegetable consumption, and heavy alcohol consumption (based on defined weekly limits for men and women).
-    \item \textbf{General health and mental/physical health}: Self-reported general health on a scale from 1 (excellent) to 5 (poor), along with the number of days with poor mental and physical health over the past 30 days.
-    \item \textbf{Pre-existing conditions}: Information on high cholesterol, coronary heart disease or myocardial infarction, and difficulty walking.
+    \item \textbf{Lifestyle indicators}: Such as smoking status (whether the individual has smoked 
+    at least 100 cigarettes in their lifetime), physical activity in the past 30 days 
+    (excluding job-related activity), daily fruit and vegetable consumption, and heavy alcohol 
+    consumption (based on defined weekly limits for men and women).
+    \item \textbf{General health and mental/physical health}: Self-reported general health on a 
+    scale from 1 (excellent) to 5 (poor), along with the number of days with poor mental and 
+    physical health over the past 30 days.
+    \item \textbf{Pre-existing conditions}: Information on high cholesterol, coronary heart 
+    disease or myocardial infarction, and difficulty walking.
 \end{itemize}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.7\textwidth]{plot_age_groups.png}
+    \caption{Distribution of Age Groups in the Dataset: Counts of individuals across thirteen defined age groups, 
+    ranging from 18 to 24 years to 80 years and older, according to the AGEG5YR scheme.}
+    \label{fig:age_groups}
+\end{figure}
 
 The target variable is \textbf{Diabetes}, which is represented as a binary category 
 (0.0 for no diabetes, 1.0 for diabetes). No missing or null values were identified in the dataset, 
 ensuring that data cleaning was minimal and straightforward. Furthermore, the dataset is perfectly 
 balanced, in that, 50\% of observations correspond to diabetes, the other 50\% do not.
+
+
 
 \section{Process}
 The steps involved in the analysis follow a standard supervised machine learning pipeline, 
@@ -98,6 +115,7 @@ applied to convert these categories into numeric values to give the distance bas
 \end{itemize}
 
 \subsubsection{Scaling}
+(SCALING SEEMS TO BE DEACTIVATED IN THE NOTEBOOK? SHOULD WE NOTE THAT IT DIDNT MAKE A DIFFERENCE SINCE PREPROCESSING TAKES CARE OF IT ALSO)
 Certain features with a wide range of values were standardized using StandardScaler. These included:
 BMI, MentHlth, PhysHlth, and Age: Standardization ensures that the models 
 (e.g., logistic regression, support vector machines) are not biased towards features with larger 
@@ -105,10 +123,11 @@ numeric ranges. This is important for algorithms that rely on the magnitude of f
 decision-making.
 
 \subsubsection{Train-Test Split}
-WE MIGHT WANNA EXPLAIN HERE WHY WE CHOSE THIS SPLIT
-
 The dataset was split into a training set (80\%) and a test set (20\%) using train\_test\_split from 
-sklearn. Stratification was applied to ensure that the class distribution of the target variable 
+sklearn. We decided on this split for our relatively large data set in order to retrieve both substantial 
+training and test set sizes. This reduces overfitting (model has enough training to learn nuances without 
+memorising specific instances) as well as yielding a robust set of unseen data for unseen data and is a common industry practice. 
+Stratification was applied to ensure that the class distribution of the target variable 
 (Diabetes) remained balanced across the training and test sets.
 
 \subsection{Feature Correlation Analysis}
@@ -121,6 +140,14 @@ not high enough to justify omitting one of two would outweigh having more featur
 on.
 WE MIGHT WANNA REFERENC SOMETHING REGARDING CORRELATION VALUES HERE 
 (when to throw away a feature / when not)
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{correlation_matrix.png}
+    \caption{Correlation matrix showing relationships between features in the dataset (Pearson correlation). 
+    Higher values indicate stronger correlations.}
+    \label{fig:correlation_matrix}
+\end{figure}
 
 \subsection{Model Selection and Evaluation}
 \subsubsection{PyCaret Experiment Setup}
@@ -145,7 +172,7 @@ feature selection resulted in slightly lower model performance. Therefore, the f
 built without this step.
 
 \section{Results}
-By using PyCaret's built-in \texttt{ClassificationExperiment}, we can quickly evaluate which classifiers perform best on our test dataset.
+By using PyCaret's built-in \texttt{ClassificationExperiment}, we can quickly evaluate which classifiers perform best on our test (???) dataset.
 
 \begin{table}[h!]
 \centering
@@ -230,7 +257,6 @@ Placeholder
     \caption{Full list of dataset features used in the analysis.}
     \label{tab:feature_list}
 \end{table}
-
 
 \printbibliography
 
