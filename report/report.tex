@@ -76,7 +76,7 @@ and 18 features, some of which are outlined as follows (for a full overview, see
     \label{fig:age_groups}
 \end{figure}
 
-The target variable is \textbf{Diabetes}, which is represented as a binary category 
+The target variable is \textit{Diabetes}, which is represented as a binary category 
 (0.0 for no diabetes, 1.0 for diabetes). No missing or null values were identified in the dataset, 
 ensuring that data cleaning was minimal and straightforward. Furthermore, the dataset is perfectly 
 balanced, in that, 50\% of observations correspond to diabetes, the other 50\% do not.
@@ -95,82 +95,89 @@ the structure of the data:
     \item Data Integrity: We confirmed that the dataset contained no missing or null values.
     \item Feature Exploration: The features were analysed for their unique values and data 
     types, revealing that many variables were binary, and the rest were either categorical or 
-    continuous. Continuous variables included features like BMI, Age, MentHlth, and PhysHlth, 
-    while categorical variables included GenHlth (self-reported health scale from 1 to 5) 
-    and binary indicators for lifestyle factors like Smoking, Physical Activity, and Alcohol 
-    Consumption.
+    continuous. Continuous variables included features like \textit{BMI}, \textit{Age}, \textit{MentHlth}, 
+    and \textit{PhysHlth}, while categorical variables included \textit{GenHlth} 
+    (self-reported health scale from 1 to 5) and binary indicators for lifestyle factors like 
+    smoking, physical activity, and alcohol consumption.
 \end{itemize}
 
 \subsection{Preprocessing}
 \subsubsection{One-Hot Encoding}
 Since the data set's features were numeric, we tried one-hot encoding features that seemed categorical
 into binary columns to prevent the model from interpreting these as continuous data, where actually
-the difference between values might not bear any meaning. 
+the distance between values might not bear any meaning. 
 
 
 \subsubsection{Scaling}
-Certain features with a wide range of values were standardized using StandardScaler. These included:
-BMI, MentHlth, PhysHlth, and Age: Standardization ensures that the models 
+Certain features with a wide range of values were standardized using sklearn's \texttt{StandardScaler}. These included:
+\textit{BMI}, \textit{MentHlth}, \textit{PhysHlth}, and \textit{Age}: Standardization ensures that the models 
 (e.g., logistic regression, support vector machines) are not biased towards features with larger 
 numeric ranges. This is important for algorithms that rely on the magnitude of features during 
 decision-making.
 
 \subsubsection{Train-Test Split}
-The dataset was split into a training set (80\%) and a test set (20\%) using train\_test\_split from 
+The dataset was split into a training set (80\%) and a test set (20\%) using \texttt{train\_test\_split} from 
 sklearn. We decided on this split for our relatively large data set in order to retrieve both substantial 
 training and test set sizes. This reduces overfitting (model has enough training to learn nuances without 
-memorising specific instances) as well as yielding a robust set of unseen data for unseen data and is a common industry practice. 
+memorising specific instances) as well as yielding a robust set of unseen data for testing and is a common industry practice. 
 Stratification was applied to ensure that the class distribution of the target variable 
-(Diabetes) remained balanced across the training and test sets.
+(\textit{Diabetes}) remained balanced across the training and test sets.
 
 \subsection{Feature Correlation Analysis}
-To explore potential multicollinearity among features, a correlation matrix was generated using 
-Seaborn's heatmap function. The goal was to identify highly correlated features that could negatively 
-impact model performance by redundancy. [ADD SOME INFO ABOUT PEARSON CORRELATION]
+To explore potential multicollinearity among features, a correlation matrix was generated and
+visualised using Seaborn's \texttt{heatmap} function. The goal was to identify highly correlated features 
+that could negatively impact model performance by redundancy. We utilised pandas' inbuilt correlation
+function that by default calculates the Pearson correlation coefficient, which is a measure of linear correlation.
 
 \subsection{Model Selection and Evaluation}
 \subsubsection{PyCaret Experiment Setup}
 For model selection, we utilised PyCaret's \texttt{ClassificationExperiment} to quickly get a 
 comparison between multiple classification models. The \texttt{ClassificationExperiment} tries 
-different models to rank the models based on accuracy, using default hyperparameters based on common practice. 
+different models to rank the models based on accuracy, using default hyperparameters based on common practices. 
 We then selected the 5 best performing models to fine-tune further via hyperparameter optimisation. 
 \\
 PyCaret’s built-in random grid-search was used to tune the hyperparameters of the selected models, 
-optimising for accuracy. The random grid search works by 
-randomly choosing a parameter value from a given (or a default) range. It then tries out different random combinations
-of hyperparameters and chooses the best one based on accuracy.
-
-\subsubsection{Model Stacking and Ensembling}
-In an effort to improve prediction accuracy, ensemble learning methods were applied:
-\begin{itemize}
-    \item A hard voting ensemble (that is, majority vote) \texttt{(blend\_models)} was created using the 
-    5 top-performing models chosen previously. The resulting blended model runs the base models on an input
-    and will output whatever was predicted most often among these.
-    \item Furthermore, a combined model using stacking was also built. 
-    Stacking works by training a model to aggreagate the predictions of all of the predictors. 
-    
-\end{itemize} 
+optimising for accuracy. The random grid-search works by 
+randomly choosing a parameter value from a given (or a default) range. It then tries out different combinations
+of these random hyperparameters and chooses the best one based on accuracy.
 
 \subsubsection{Feature Selection}
 Some rudimentary feature selection was employed, using PyCaret's \texttt{ClassificationExperiment}'s inbuilt
-feature selection method. This reduces the set of features to only those deemed important based on
-statistical tests and feature importance techniques, which may help improve model performance.
+feature selection parameter. This reduces the set of features, the model is trained on, to only those deemed 
+important based on statistical tests and feature importance techniques, which may help improve model 
+performance.
+
+\subsubsection{Model Stacking and Ensembling}
+In an effort to improve prediction accuracy, two ensemble learning methods were applied:
+\begin{itemize}
+    \item A hard voting ensemble (that is, majority vote) was created that involved 
+    the 5 top-performing models chosen previously, using PyCaret's \texttt{(blend\_models)}. 
+    The resulting blended model runs its base models on an input
+    and will output whatever was predicted most often among these.
+    \item Furthermore, a combined model using stacking was also built. 
+    Stacking works by training a model to aggregate the predictions of all of the predictors in a more
+    sophisticated way than blending.
+\end{itemize} 
 
 \section{Results}
-By using PyCaret's built-in \texttt{ClassificationExperiment}, we can quickly evaluate which classifiers perform best on our training dataset.
+SOME SORT OF INTRODUCTION NEEDS TO GO HERE I GUESS
 
+\subsection{Preprocessing}
+One-hot encoding features, that were already binary but numerical did not make any difference in the model's
+performance. This goes to show that a model can be trained on binary features equivalently well, regardless
+of whether they are represented by float or boolean values. However, one-hot encoding the 5-category-feature
+\textit{GenHlth} resulted in slightly higher accuracy values for all models evaluated by \texttt{ClassificationExperiment}.
+Therefore, we proceded with this encoding.
+\\
+Scaling continuous attributes actually resulted in some of the best models performing worse then without.
+We also learnt that \texttt{ClassificationExperiment} takes care of preprocessing steps (involving scaling)
+as needed for different models. Hence, we chose to omit manual scaling and let PyCaret take care of it.
 
-However, the stacking model did not outperform the ensemble.
-After experimenting with feature selection (also implemented via PyCaret), we found that applying 
-feature selection resulted in slightly lower model performance. Therefore, the final models were 
-built without this step.
-
-\subsection{TBD}
-Findings: The GenHlth and PhysHlth features exhibited some degree of linear correlation but it was
-not high enough to justify omitting one of two would outweigh having more features / data to train 
+\subsection{Feature Correlation Analysis}
+The features \textit{GenHlth\_5.0} and \textit{PhysHlth} exhibited strong linear correlation ($r = 0.52 > 0.5$),
+albeit on the lower end. Omitting \textit{GenHlth\_5.0}, however, decreased accuracy across our top 5 models,
+implying the degree of correlation was not high enough to outweigh having more features / data to train 
 on.
-WE MIGHT WANNA REFERENC SOMETHING REGARDING CORRELATION VALUES HERE 
-(when to throw away a feature / when not)
 
 \begin{figure}[H]
     \centering
@@ -180,15 +187,10 @@ WE MIGHT WANNA REFERENC SOMETHING REGARDING CORRELATION VALUES HERE
     \label{fig:correlation_matrix}
 \end{figure}
 
-\begin{itemize}
-    \item Sex: Encoded as a binary variable with one-hot encoding and drop\_first=True to prevent
-    perfect multicollinearity (i.e., avoiding redundancy with one binary variable sufficing to 
-    represent gender).
-    \item GenHlth: This feature, originally a categorical variable on a scale from 1 to 5, 
-    was one-hot encoded to allow for better model interpretation and training.
-\end{itemize}
+\subsection{ClassificationExperiment}
+With this setup, PyCaret's \texttt{ClassificationExperiment} yielded the following results:
 
-\begin{table}[h!]
+\begin{table}[H]
 \centering
 \begin{tabular}{l l c c c c}
 \toprule
@@ -206,16 +208,40 @@ WE MIGHT WANNA REFERENC SOMETHING REGARDING CORRELATION VALUES HERE
 \texttt{knn} & K Neighbors Classifier & 0.7019 & 0.7196 & 0.6951 & 0.7071 \\
 \bottomrule
 \end{tabular}
-\caption{Performance of Top 10 Models (Accuracy, Recall, Precision, F1) with Highlighted Values}
+\caption{Performance of Top 10 Models after (sorted by accuracy, top scores [Accuracy, Recall, Precision, F1] highlighted)}
 \label{tab:model_performance}
 \end{table}
-\subsection{Summary of Best Model Performance}
 
+Our rudimentary feature selection analysis produced the following results:
 
+\begin{table}[H]
+    \centering
+    \begin{tabular}{l l c c c c}
+    \toprule
+    \textbf{Model} & \textbf{Classifier} & \textbf{Accuracy} & \textbf{Recall} & \textbf{Precision} & \textbf{F1} \\
+    \midrule
+    \texttt{gbc} & Gradient Boosting Classifier & \cellcolor{yellow}0.7302 & \cellcolor{yellow}0.7761 & 0.7109 & \cellcolor{yellow}0.7420 \\
+    \texttt{lightgbm} & Light Gradient Boosting Machine & 0.7302 & 0.7700 & 0.7133 & 0.7405 \\
+    \texttt{ada} & Ada Boost Classifier & 0.7299 & 0.7581 & 0.7178 & 0.7373 \\
+    \texttt{lr} & Logistic Regression & 0.7260 & 0.7350 & \cellcolor{yellow}0.7222 & 0.7284 \\
+    \texttt{ridge} & Ridge Classifier & 0.7258 & 0.7374 & 0.7209 & 0.7290 \\
+    \texttt{lda} & Linear Discriminant Analysis & 0.7258 & 0.7374 & 0.7209 & 0.7290 \\
+    \texttt{qda} & Quadratic Discriminant Analysis & 0.7250 & 0.7514 & 0.7139 & 0.7321 \\
+    \texttt{nb} & Naive Bayes & 0.7238 & 0.7382 & 0.7177 & 0.7277 \\
+    \texttt{rf} & Random Forest Classifier & 0.7231 & 0.7645 & 0.7062 & 0.7341 \\
+    \texttt{et} & Extra Trees Classifier & 0.7229 & 0.7530 & 0.7104 & 0.7310 \\
+    \bottomrule
+    \end{tabular}
+    \caption{Performance of Top 10 Models after feature selection (sorted by accuracy, top scores [Accuracy, Recall, Precision, F1] highlighted)}
+    \label{tab:model_performance_fs}
+\end{table}
+    
+As can be seen, feature selection affected the best performing models negatively, we therefore 
+proceeded keeping all features in the data.
+After optimising the hyperparameters, the resulting scores of the five best models were as shown
+(note that most models did not benefit from hyperparameter tuning): 
 
-The table below shows the best results for the top 5 models (sorted by accuracy) for the key metrics: Accuracy, Recall, Precision, and F1. The best value for each metric is highlighted in yellow.
-WE NEED TO CHECK IF THIS IS RIGHT
-\begin{table}[h!]
+\begin{table}[H]
 \centering
 \begin{tabular}{l l c c c c}
 \toprule
@@ -228,18 +254,78 @@ WE NEED TO CHECK IF THIS IS RIGHT
 \texttt{ridge}  & Ridge Classifier & 0.7467 & 0.7799 & 0.7314 & 0.7549 \\  % Original selected based on accuracy
 \bottomrule
 \end{tabular}
-\caption{Best Results of Top 5 Models (Sorted by Accuracy, with highlights for best metrics)}
+\caption{WE NEED TO CHECK IF THIS IS RIGHT Best Results of Top 5 Models (sorted by accuracy, top scores highlighted)}
 \label{tab:best_model_performance}
 \end{table}
-\subsection{Ensamble (stacking and blending)}
+
+
+\subsection{Model Stacking and Ensembling}
+
+We ensembled the 5 best tuned models using blending:
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{l c c c c}
+    \toprule
+    \textbf{Model} & \textbf{Accuracy} & \textbf{Recall} & \textbf{Precision} & \textbf{F1} \\
+    \midrule
+    \texttt{Blended Model} & 0.7495 & 0.7783 & 0.7359 & 0.7565 \\
+    \bottomrule
+    \end{tabular}
+    \caption{Blending Results (Mean Performance Metrics)}
+    \label{tab:blending_performance}
+\end{table}
+
+The scores suggest that this ensemble would perform worse than a Light Gradient Boosting model alone.
+Our stacking ensemble yielded the following results:
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{l c c c c}
+    \toprule
+    \textbf{Model} & \textbf{Accuracy} & \textbf{Recall} & \textbf{Precision} & \textbf{F1} \\
+    \midrule
+    \texttt{Stacking Ensemble} & 0.7500 & 0.7810 & 0.7356 & 0.7575 \\
+    \bottomrule
+    \end{tabular}
+    \caption{Stacking Ensemble Results (Mean Performance Metrics)}
+    \label{tab:stacking_performance}
+\end{table}
+    
+Hence, a Light Gradient Boosting model would outperform a stacking ensemble, too.
+Since our 5 best models included models that were based on a similar method (e.g., Light Gradient Boosting 
+and Gradient Boosting), we then tried to ensemble hand-picked models in an effort to diversify the set of
+base models, that is, avoid near-perfect correlation between models. We therefore selected Gradient Boosting Classifier, 
+Ada Boost Classifier and Ridge Classifier (WHY DID WE NOT USE THE TUNED ONES, Light Gradient performed better).
+Blending performed better than stacking, the results are shown below:
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{l c c c c}
+    \toprule
+    \textbf{Model} & \textbf{Accuracy} & \textbf{Recall} & \textbf{Precision} & \textbf{F1} \\
+    \midrule
+    \texttt{Blending Ensemble} & 0.7523 & 0.7818 & 0.7383 & 0.7594 \\
+    \bottomrule
+    \end{tabular}
+    \caption{Blending Ensemble Results with selected base models (Mean Performance Metrics)}
+    \label{tab:blending_performance_handpicked}
+\end{table}
+
+This was the best model we could find for our data.
+
+
 \subsection{Testing the models with the test data}
 \subsection{Overfitting/Underfitting}
 \subsection{Addressing over and underfitting?}
 
-\section{Future Work}
+
+\section{Discussion and Future Work}
 % https://www.kaggle.com/code/solafajobi/diabetes-perfect-prediction#Feature-Selection
 
 seems to get better results, check stuff he did
+
+address that most models did not benefit from tuning
 
 \clearpage
 
@@ -251,24 +337,24 @@ seems to get better results, check stuff he did
     \begin{tabularx}{\textwidth}{|l|X|}
     \hline
     \textbf{Feature} & \textbf{Description} \\ \hline
-    Age & Coded in 13 age groups (e.g., 1: 18-24, 2: 25-29, etc.) \\ \hline
-    Sex & Sex of the individual (0: Male, 1: Female) \\ \hline
-    HighChol & High cholesterol (0: No, 1: Yes) \\ \hline
-    CholCheck & Checked cholesterol in the last 5 years (0: No, 1: Yes) \\ \hline
-    BMI & Body Mass Index (continuous variable) \\ \hline
-    Smoker & Smoked at least 100 cigarettes in their lifetime (0: No, 1: Yes) \\ \hline
-    HeartDiseaseorAttack & History of coronary heart disease or myocardial infarction (0: No, 1: Yes) \\ \hline
-    PhysActivity & Engaged in physical activity in the past 30 days, excluding work (0: No, 1: Yes) \\ \hline
-    Fruits & Consumes fruit 1 or more times per day (0: No, 1: Yes) \\ \hline
-    Veggies & Consumes vegetables 1 or more times per day (0: No, 1: Yes) \\ \hline
-    HvyAlcoholConsump & Heavy alcohol consumption (men: 14+ drinks/week, women: 7+ drinks/week) (0: No, 1: Yes) \\ \hline
-    GenHlth & Self-reported general health (1: Excellent, 2: Very good, 3: Good, 4: Fair, 5: Poor) \\ \hline
-    MentHlth & Days of poor mental health in the past 30 days (0 to 30) \\ \hline
-    PhysHlth & Days of poor physical health in the past 30 days (0 to 30) \\ \hline
-    DiffWalk & Difficulty walking or climbing stairs (0: No, 1: Yes) \\ \hline
-    Stroke & History of stroke (0: No, 1: Yes) \\ \hline
-    HighBP & High blood pressure (0: No, 1: Yes) \\ \hline
-    Diabetes & Presence of diabetes (0: No, 1: Yes) \\ \hline
+    \textit{Age} & Coded in 13 age groups (e.g., 1: 18-24, 2: 25-29, etc.) \\ \hline
+    \textit{Sex} & Sex of the individual (0: Male, 1: Female) \\ \hline
+    \textit{HighChol} & High cholesterol (0: No, 1: Yes) \\ \hline
+    \textit{CholCheck} & Checked cholesterol in the last 5 years (0: No, 1: Yes) \\ \hline
+    \textit{BMI} & Body Mass Index (continuous variable) \\ \hline
+    \textit{Smoker} & Smoked at least 100 cigarettes in their lifetime (0: No, 1: Yes) \\ \hline
+    \textit{HeartDiseaseorAttack} & History of coronary heart disease or myocardial infarction (0: No, 1: Yes) \\ \hline
+    \textit{PhysActivity} & Engaged in physical activity in the past 30 days, excluding work (0: No, 1: Yes) \\ \hline
+    \textit{Fruits} & Consumes fruit 1 or more times per day (0: No, 1: Yes) \\ \hline
+    \textit{Veggies} & Consumes vegetables 1 or more times per day (0: No, 1: Yes) \\ \hline
+    \textit{HvyAlcoholConsump} & Heavy alcohol consumption (men: 14+ drinks/week, women: 7+ drinks/week) (0: No, 1: Yes) \\ \hline
+    \textit{GenHlth} & Self-reported general health (1: Excellent, 2: Very good, 3: Good, 4: Fair, 5: Poor) \\ \hline
+    \textit{MentHlth} & Days of poor mental health in the past 30 days (0 to 30) \\ \hline
+    \textit{PhysHlth} & Days of poor physical health in the past 30 days (0 to 30) \\ \hline
+    \textit{DiffWalk} & Difficulty walking or climbing stairs (0: No, 1: Yes) \\ \hline
+    \textit{Stroke} & History of stroke (0: No, 1: Yes) \\ \hline
+    \textit{HighBP} & High blood pressure (0: No, 1: Yes) \\ \hline
+    \textit{Diabetes} & Presence of diabetes (0: No, 1: Yes) \\ \hline
     \end{tabularx}
     \caption{Full list of dataset features used in the analysis.}
     \label{tab:feature_list}
