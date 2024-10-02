@@ -82,10 +82,11 @@ ensuring that data cleaning was minimal and straightforward. Furthermore, the da
 balanced, in that, 50\% of observations correspond to diabetes, the other 50\% do not.
 
 
-
 \section{Process}
 The steps involved in the analysis follow a standard supervised machine learning pipeline, 
 from data preparation to model selection and evaluation.
+
+\section{CHECK FOR HIGH COLESTEROL AND DIABETES, part of EDA.}
 
 \subsection{Data Loading and Exploration}
 The dataset was loaded into a pandas DataFrame. Initial exploration was conducted to understand 
@@ -102,20 +103,12 @@ the structure of the data:
 
 \subsection{Preprocessing}
 \subsubsection{One-Hot Encoding}
-WE SHOULD DISCUSS THIS AGAIN
+Since the data set's features were numeric, we tried one-hot encoding features that seemed categorical
+into binary columns to prevent the model from interpreting these as continuous data, where actually
+the difference between values might not bear any meaning. 
 
-Since some categorical features (e.g., Sex, GenHlth) were non-numeric, one-hot encoding was 
-applied to convert these categories into numeric values to give the distance based models a chance too:
-\begin{itemize}
-    \item Sex: Encoded as a binary variable with one-hot encoding and drop\_first=True to prevent
-    perfect multicollinearity (i.e., avoiding redundancy with one binary variable sufficing to 
-    represent gender).
-    \item GenHlth: This feature, originally a categorical variable on a scale from 1 to 5, 
-    was one-hot encoded to allow for better model interpretation and training.
-\end{itemize}
 
 \subsubsection{Scaling}
-(SCALING SEEMS TO BE DEACTIVATED IN THE NOTEBOOK? SHOULD WE NOTE THAT IT DIDNT MAKE A DIFFERENCE SINCE PREPROCESSING TAKES CARE OF IT ALSO)
 Certain features with a wide range of values were standardized using StandardScaler. These included:
 BMI, MentHlth, PhysHlth, and Age: Standardization ensures that the models 
 (e.g., logistic regression, support vector machines) are not biased towards features with larger 
@@ -133,8 +126,46 @@ Stratification was applied to ensure that the class distribution of the target v
 \subsection{Feature Correlation Analysis}
 To explore potential multicollinearity among features, a correlation matrix was generated using 
 Seaborn's heatmap function. The goal was to identify highly correlated features that could negatively 
-impact model performance by redundancy.
+impact model performance by redundancy. [ADD SOME INFO ABOUT PEARSON CORRELATION]
 
+\subsection{Model Selection and Evaluation}
+\subsubsection{PyCaret Experiment Setup}
+For model selection, we utilised PyCaret's \texttt{ClassificationExperiment} to quickly get a 
+comparison between multiple classification models. The \texttt{ClassificationExperiment} tries 
+different models to rank the models based on accuracy, using default hyperparameters based on common practice. 
+We then selected the 5 best performing models to fine-tune further via hyperparameter optimisation. 
+\\
+PyCaret’s built-in random grid-search was used to tune the hyperparameters of the selected models, 
+optimising for accuracy. The random grid search works by 
+randomly choosing a parameter value from a given (or a default) range. It then tries out different random combinations
+of hyperparameters and chooses the best one based on accuracy.
+
+\subsubsection{Model Stacking and Ensembling}
+In an effort to improve prediction accuracy, ensemble learning methods were applied:
+\begin{itemize}
+    \item A hard voting ensemble (that is, majority vote) \texttt{(blend\_models)} was created using the 
+    5 top-performing models chosen previously. The resulting blended model runs the base models on an input
+    and will output whatever was predicted most often among these.
+    \item Furthermore, a combined model using stacking was also built. 
+    Stacking works by training a model to aggreagate the predictions of all of the predictors. 
+    
+\end{itemize} 
+
+\subsubsection{Feature Selection}
+Some rudimentary feature selection was employed, using PyCaret's \texttt{ClassificationExperiment}'s inbuilt
+feature selection method. This reduces the set of features to only those deemed important based on
+statistical tests and feature importance techniques, which may help improve model performance.
+
+\section{Results}
+By using PyCaret's built-in \texttt{ClassificationExperiment}, we can quickly evaluate which classifiers perform best on our training dataset.
+
+
+However, the stacking model did not outperform the ensemble.
+After experimenting with feature selection (also implemented via PyCaret), we found that applying 
+feature selection resulted in slightly lower model performance. Therefore, the final models were 
+built without this step.
+
+\subsection{TBD}
 Findings: The GenHlth and PhysHlth features exhibited some degree of linear correlation but it was
 not high enough to justify omitting one of two would outweigh having more features / data to train 
 on.
@@ -149,30 +180,13 @@ WE MIGHT WANNA REFERENC SOMETHING REGARDING CORRELATION VALUES HERE
     \label{fig:correlation_matrix}
 \end{figure}
 
-\subsection{Model Selection and Evaluation}
-\subsubsection{PyCaret Experiment Setup}
-For model selection, we utilised PyCaret's ClassificationExperiment to quickly get a 
-comparison between multiple classification models. We then selected the 
-5 best performing models based on default hyperparameters to fine-tune further via hyperparameter
-optimisation.
-\\
-PyCaret’s built-in random grid-search was used to tune the hyperparameters of the selected models, 
-optimising for accuracy.
-
-\subsubsection{Model Stacking and Ensembling}
-Ensemble Methods: In an effort to improve prediction accuracy, ensemble learning methods were applied. 
-A hard voting ensemble (WHAT DOES THIS EXACTLY DO?) (blend\_models) was created using the 
-top-performing models.
-Stacking: A stacking model was also built, ..... 
-However, the stacking model did not outperform the ensemble.
-
-\subsection{Model Stacking and Ensembling}
-After experimenting with feature selection (also implemented via PyCaret), we found that applying 
-feature selection resulted in slightly lower model performance. Therefore, the final models were 
-built without this step.
-
-\section{Results}
-By using PyCaret's built-in \texttt{ClassificationExperiment}, we can quickly evaluate which classifiers perform best on our test (???) dataset.
+\begin{itemize}
+    \item Sex: Encoded as a binary variable with one-hot encoding and drop\_first=True to prevent
+    perfect multicollinearity (i.e., avoiding redundancy with one binary variable sufficing to 
+    represent gender).
+    \item GenHlth: This feature, originally a categorical variable on a scale from 1 to 5, 
+    was one-hot encoded to allow for better model interpretation and training.
+\end{itemize}
 
 \begin{table}[h!]
 \centering
@@ -223,7 +237,9 @@ WE NEED TO CHECK IF THIS IS RIGHT
 \subsection{Addressing over and underfitting?}
 
 \section{Future Work}
-Placeholder
+% https://www.kaggle.com/code/solafajobi/diabetes-perfect-prediction#Feature-Selection
+
+seems to get better results, check stuff he did
 
 \clearpage
 
