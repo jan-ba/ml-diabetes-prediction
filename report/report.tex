@@ -324,17 +324,46 @@ Blending performed better than stacking, the results are shown below:
 This was the best model we could find for our data.
 
 
-\subsection{Testing the models with the test data}
-\subsection{Overfitting/Underfitting}
-\subsection{Addressing over and underfitting?}
+\subsection{Testing the Models with the Test Data}
+
+After training the ensemble model on the training dataset, the model was evaluated on both the 
+training and test data to measure its performance and generalization capability. 
+Table \ref{tab:accuracy_results} shows the accuracy results for both the training and test sets.
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|c|c|}
+        \hline
+        \textbf{Dataset} & \textbf{Accuracy} \\
+        \hline
+        Training Data & 0.7534 \\
+        Test Data & 0.7492 \\
+        \hline
+    \end{tabular}
+    \caption{Accuracy of the ensemble model on training and test data.}
+    \label{tab:accuracy_results}
+\end{table}
+
+The results indicate that the blended ensamble performs well both on the training and the test data. Since there is little to no difference between the training and the test accuracy it means that the model is able to generalize well on never seen data. 
+Overfitting means that the model is learning the training data too closely, whitch is not the case in our model.
+The final test accuracy of 74.92\% is the best that we could do for this project. 
+Further improvement could possible be achieved through additional tuning of the hyperparameters or more indepth feature engineering.
+
+
 
 
 \section{Discussion and Future Work}
+Its worth noting that while wrapping up this project up we checked other solutions on Kaggle on the same dataset and found that our score and model is not that good compared to others.
+Other models involved better feature selection based on correlation of the features to the target class diabetes.
 % https://www.kaggle.com/code/solafajobi/diabetes-perfect-prediction#Feature-Selection
+    Some of our models did not benefit from the hyperparameter tuning and the original models were simply better.
+    There are two reasons why that might be:
+    \begin{itemize}
+        \item The default values for the hyperparameters were simply so good that the tuning did not manage to find any better ones
+        \item The tuning used random grid search for the tuning therefore it might be that our tuned hyperparameters are not as good as they could be.
+    \end{itemize}
 
-seems to get better results, check stuff he did
 
-address that most models did not benefit from tuning
 
 could have checked for correlation of features with target (like kaggle solution) and dropped little-correlated ones
 
