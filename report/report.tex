@@ -49,7 +49,7 @@ explore how machine learning can be used to analyse health-related data and
 provide insights into potential risk factors.
 
 \subsection{Dataset}
-The dataset at hand, "Diabetes, Hypertension and Stroke Prediction," is from Kaggle and contains 
+The dataset at hand, "Diabetes, Hypertension and Stroke Prediction," is from \href{https://www.kaggle.com/datasets/prosperchuks/health-dataset/data}{Kaggle} and contains 
 health-related data in CSV format intended for predicting diabetes, hypertension and stroke. 
 For this project, we are solely focussing on diabetes. The dataset consists of 70,692 observations 
 and 18 features, some of which are outlined as follows (for a full overview, see Table \ref{tab:feature_list} in the Appendix):
@@ -348,19 +348,31 @@ Further improvement could possible be achieved through additional tuning of the 
 
 
 \section{Discussion and Future Work}
-Its worth noting that while wrapping up this project up we checked other solutions on Kaggle on the same dataset and found that our score and model is not that good compared to others.
-Other models involved better feature selection based on correlation of the features to the target class diabetes.
-% https://www.kaggle.com/code/solafajobi/diabetes-perfect-prediction#Feature-Selection
-    Some of our models did not benefit from the hyperparameter tuning and the original models were simply better.
-    There are two reasons why that might be:
-    \begin{itemize}
-        \item The default values for the hyperparameters were simply so good that the tuning did not manage to find any better ones
-        \item The tuning used random grid search for the tuning therefore it might be that our tuned hyperparameters are not as good as they could be.
-    \end{itemize}
 
+While wrapping up this project, we compared our solution to other approaches on Kaggle, such as \href{https://www.kaggle.com/code/solafajobi/diabetes-perfect-prediction}{this one} using the same dataset. 
+We found that our model's performance, while reasonable, did not achieve the same high level as some of the best-performing solutions.
 
+One of the key differences is that other solutions implemented feature selection based on the correlation of the features to the target class (diabetes). 
+Although we tested feature selection methods, they did not improve our models; in fact, it caused a degradation in performance for the top models produced by \texttt{ClassificationExperiment}. 
+Additionally, some of our models did not benefit from hyperparameter tuning, and the original versions of the models performed better. 
+There could be two main reasons for this:
+\begin{itemize}
+    \item The default hyperparameters were already optimized, making it difficult for the tuning process to find better values.
+    \item The hyperparameter tuning used a random grid search, and it is possible that the tuned parameters were not as effective as they could have been with a better search method like grid search.
+\end{itemize}
 
-could have checked for correlation of features with target (like kaggle solution) and dropped little-correlated ones
+\subsection{Future Work}
+
+While the current model performs decently, several avenues for improvement exist:
+\begin{itemize}
+    \item \textbf{Improved Feature Selection:} Future iterations of this project could explore more sophisticated feature selection methods.
+    \item \textbf{Advanced Hyperparameter Tuning:} Instead of random grid search, more robust techniques could be employed to find optimal hyperparameters.
+    \item \textbf{Model Interpretability:} Since the best model is an ensamble it might be hard to interperate it. It might be better to choose non ensambled model from the top tuned models for easier interpretability.
+\end{itemize}
+
+In conclusion, while our current approach demonstrates a reasonable performance, there is room for improvement. 
+By refining feature selection, applying advanced hyperparameter tuning techniques, future iterations of this project might yield better results.
+
 
 \clearpage
 
