@@ -145,9 +145,9 @@ of these random hyperparameters and chooses the best one based on accuracy.
 Cross-validation was automatically performed by \texttt{ClassificationExperiment}. 
 We employed 10-fold cross-validation, where the dataset is split into 10 equal parts (folds). 
 A model is trained on 9 of these and tested on the remaining one. This process is repeated 10 times, 
-each time using a different fold for testing. This method ensures that every data point is used for both training 
+each time using a different fold for testing. This method ensures that every observation is used for both training 
 and testing, which allows for a robust evaluation of the model's performance while also improving generalisability / 
-reduce risk of overfitting. The final performance metrics are averaged over the 10 iterations in an attempt to 
+reduce risk of overfitting. The final performance metrics are averaged in an attempt to 
 provide a reliable estimate of model accuracy on unseen data.
 
 
@@ -171,8 +171,10 @@ In an effort to improve prediction accuracy, two ensemble learning methods were 
 \end{itemize} 
 
 \section{Results}
-SOME SORT OF INTRODUCTION NEEDSs TO GO HERE I GUESS - WE COULD BRIEFLY EXPLAIN THE SCORES WE PAID ATTENTION TO,
-THAT IS, ACCURACY, F1, ...
+For the results section, we primarily focused on evaluating different models' performances using accuracy, while also
+incorporating F1 score, recall, and precision. Accuracy was chosen as our main metric because it is a 
+straightforward measure that comprehensively includes all possible outcomes of the confusion matrix. 
+According to an article by Google \cite{Google}, accuracy serves as a robust quality estimate for balanced data sets.
 
 \subsection{Preprocessing}
 One-hot encoding features, that were already binary but numerical did not make any difference in the model's
@@ -272,8 +274,6 @@ After optimising the hyperparameters, the resulting scores of the five best mode
 \caption{Best Results of Top 5 Models (sorted by accuracy, top scores highlighted)}
 \label{tab:best_model_performance}
 \end{table}
-
-% hingað er tilbúið 
 
 \subsection{Model Stacking and Ensembling}
 
