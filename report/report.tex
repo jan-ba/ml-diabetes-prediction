@@ -86,7 +86,6 @@ balanced, in that, 50\% of observations correspond to diabetes, the other 50\% d
 The steps involved in the analysis follow a standard supervised machine learning pipeline, 
 from data preparation to model selection and evaluation.
 
-\section{CHECK FOR HIGH COLESTEROL AND DIABETES, part of EDA.}
 
 \subsection{Data Loading and Exploration}
 The dataset was loaded into a pandas DataFrame. Initial exploration was conducted to understand 
@@ -100,7 +99,7 @@ the structure of the data:
     (self-reported health scale from 1 to 5) and binary indicators for lifestyle factors like 
     smoking, physical activity, and alcohol consumption.
     \item Cyclical values: None of your features were cyclical (e.g. month of the year where December and 
-    January numerically seem to be far apart, but actually are not)
+    January seem to be far apart numerically, but actually are not).
 \end{itemize}
 
 \subsection{Preprocessing}
@@ -111,8 +110,8 @@ the distance between values might not bear any meaning.
 
 
 \subsubsection{Scaling}
-Certain features with a wide range of values were standardized using sklearn's \texttt{StandardScaler}. These included:
-\textit{BMI}, \textit{MentHlth}, \textit{PhysHlth}, and \textit{Age}: Standardization ensures that the models 
+Certain features with a wide range of values were standardised using sklearn's \texttt{StandardScaler}. These included:
+\textit{BMI}, \textit{MentHlth}, \textit{PhysHlth}, and \textit{Age}: Standardisation ensures that the models 
 (e.g., logistic regression, support vector machines) are not biased towards features with larger 
 numeric ranges. This is important for algorithms that rely on the magnitude of features during 
 decision-making.
@@ -143,7 +142,14 @@ optimising for accuracy. The random grid-search works by
 randomly choosing a parameter value from a given (or a default) range. It then tries out different combinations
 of these random hyperparameters and chooses the best one based on accuracy.
 \\
-ADD SOMETHING ABOUT CROSS VALIDATION HERE (which should be performed by the ClassifciationExperiment)
+Cross-validation was automatically performed by \texttt{ClassificationExperiment}. 
+We employed 10-fold cross-validation, where the dataset is split into 10 equal parts (folds). 
+A model is trained on 9 of these and tested on the remaining one. This process is repeated 10 times, 
+each time using a different fold for testing. This method ensures that every data point is used for both training 
+and testing, which allows for a robust evaluation of the model's performance while also improving generalisability / 
+reduce risk of overfitting. The final performance metrics are averaged over the 10 iterations in an attempt to 
+provide a reliable estimate of model accuracy on unseen data.
+
 
 
 \subsubsection{Feature Selection}
@@ -165,7 +171,7 @@ In an effort to improve prediction accuracy, two ensemble learning methods were 
 \end{itemize} 
 
 \section{Results}
-SOME SORT OF INTRODUCTION NEEDS TO GO HERE I GUESS - WE COULD BRIEFLY EXPLAIN THE SCORES WE PAID ATTENTION TO,
+SOME SORT OF INTRODUCTION NEEDSs TO GO HERE I GUESS - WE COULD BRIEFLY EXPLAIN THE SCORES WE PAID ATTENTION TO,
 THAT IS, ACCURACY, F1, ...
 
 \subsection{Preprocessing}
@@ -180,7 +186,7 @@ We also learnt that \texttt{ClassificationExperiment} takes care of preprocessin
 as needed for different models. Hence, we chose to omit manual scaling and let PyCaret take care of it.
 
 \subsection{Feature Correlation Analysis}
-The features \textit{GenHlth\_5.0} and \textit{PhysHlth} exhibited strong linear correlation ($r = 0.52 >= 0.5$),
+The features \textit{GenHlth\_5.0} and \textit{PhysHlth} exhibited strong linear correlation ($r = 0.52 \geq 0.5$),
 albeit on the lower end. Omitting \textit{GenHlth\_5.0}, however, decreased accuracy across our top 5 models,
 implying the degree of correlation was not high enough to outweigh having more features / data to train 
 on.
@@ -256,8 +262,8 @@ After optimising the hyperparameters, the resulting scores of the five best mode
 \toprule
 \textbf{Model} & \textbf{Classifier} & \textbf{Accuracy} & \textbf{Recall} & \textbf{Precision} & \textbf{F1} \\
 \midrule
-\texttt{gbc}    & Gradient Boosting Classifier & 0.7508 & 0.7897 & 0.7329 & 0.7601 \\  % Original selected based on accuracy
-\texttt{lightgbm} & Light Gradient Boosting Machine & 0.7507 & 0.7915 & 0.7319 & 0.7604 \\  % Tuned selected based on accuracy
+\texttt{gbc}    & Gradient Boosting Classifier & \cellcolor{yellow}0.7508 & 0.7897 & 0.7329 & 0.7601 \\  % Original selected based on accuracy
+\texttt{lightgbm} & Light Gradient Boosting Machine & 0.7507 & \cellcolor{yellow}0.7915 & 0.7319 & \cellcolor{yellow}0.7604 \\  % Tuned selected based on accuracy
 \texttt{ada} & Ada Boost Classifier & 0.7482 & 0.7731 & \cellcolor{yellow}0.7366 & 0.7543 \\ % Original selected based on accuracy
 \texttt{lr} & Logistic Regression & 0.7471 & 0.7741 & 0.7345 & 0.7537 \\  % Tuned selected based on accuracy
 \texttt{lda} & Linear Discriminant Analysis & 0.7467 & 0.7798 & 0.7314 & 0.7548 \\ % Original selected based on accuracy 
@@ -267,6 +273,7 @@ After optimising the hyperparameters, the resulting scores of the five best mode
 \label{tab:best_model_performance}
 \end{table}
 
+% hingað er tilbúið 
 
 \subsection{Model Stacking and Ensembling}
 
@@ -285,7 +292,7 @@ We ensembled the 5 best tuned models using blending:
     \label{tab:blending_performance}
 \end{table}
 
-The scores suggest that this ensemble would perform worse than a Light Gradient Boosting model alone.
+The scores suggest that this ensemble would perform worse than a Gradient Boosting model alone.
 Our stacking ensemble yielded the following results:
 
 \begin{table}[H]
@@ -294,18 +301,18 @@ Our stacking ensemble yielded the following results:
     \toprule
     \textbf{Model} & \textbf{Accuracy} & \textbf{Recall} & \textbf{Precision} & \textbf{F1} \\
     \midrule
-    \texttt{Stacking Ensemble} & 0.7500 & 0.7810 & 0.7356 & 0.7575 \\
+    \texttt{Stacking Ensemble} & 0.7507 & 0.7800 & 0.7369 & 0.7578 \\
     \bottomrule
     \end{tabular}
     \caption{Stacking Ensemble Results (Mean Performance Metrics)}
     \label{tab:stacking_performance}
 \end{table}
     
-Hence, a Light Gradient Boosting model would outperform a stacking ensemble, too.
+Hence, a Gradient Boosting model would outperform a stacking ensemble, too.
 Since our 5 best models included models that were based on a similar method (e.g., Light Gradient Boosting 
 and Gradient Boosting), we then tried to ensemble hand-picked models in an effort to diversify the set of
-base models, that is, avoid near-perfect correlation between models. We therefore selected Gradient Boosting Classifier, 
-Ada Boost Classifier and Ridge Classifier (WHY DID WE NOT USE THE TUNED ONES, Light Gradient performed better).
+base models, that is, avoid near-perfect correlation between models. However, the best combination we found still 
+involved Gradient Boosting Classifier, Light Gradient Boosting Classifier and Ada Boost Classifier.
 Blending performed better than stacking, the results are shown below:
 
 \begin{table}[H]
@@ -314,10 +321,10 @@ Blending performed better than stacking, the results are shown below:
     \toprule
     \textbf{Model} & \textbf{Accuracy} & \textbf{Recall} & \textbf{Precision} & \textbf{F1} \\
     \midrule
-    \texttt{Blending Ensemble} & 0.7523 & 0.7818 & 0.7383 & 0.7594 \\
+    \texttt{Blending Ensemble} & 0.7522 & 0.7867 & 0.7360 & 0.7604 \\
     \bottomrule
     \end{tabular}
-    \caption{Blending Ensemble Results with selected base models (Mean Performance Metrics)}
+    \caption{Blending Ensemble Results with selected base models (gbc, ada, lightgbm) (Mean Performance Metrics)}
     \label{tab:blending_performance_handpicked}
 \end{table}
 
@@ -327,7 +334,7 @@ This was the best model we could find for our data.
 \subsection{Testing the Models with the Test Data}
 
 After training the ensemble model on the training dataset, the model was evaluated on both the 
-training and test data to measure its performance and generalization capability. 
+training and test data to measure its performance and generalisation capability. 
 Table \ref{tab:accuracy_results} shows the accuracy results for both the training and test sets.
 
 \begin{table}[h]
@@ -344,12 +351,11 @@ Table \ref{tab:accuracy_results} shows the accuracy results for both the trainin
     \label{tab:accuracy_results}
 \end{table}
 
-The results indicate that the blended ensamble performs well both on the training and the test data. Since there is little to no difference between the training and the test accuracy it means that the model is able to generalize well on never seen data. 
-Overfitting means that the model is learning the training data too closely, whitch is not the case in our model.
+The results indicate that the blended ensamble performs well both on the training and the test data. Since there is little to 
+no difference between the training and the test accuracy it means that the model is able to generalise well on unseen data. 
+Overfitting would imply that the model is learning the training data too closely, whitch seems not to the case for our model.
 The final test accuracy of 74.92\% is the best that we could do for this project. 
 Further improvement could possible be achieved through additional tuning of the hyperparameters or more indepth feature engineering.
-
-
 
 
 \section{Discussion and Future Work}
