@@ -12,7 +12,7 @@
 \usepackage{booktabs}
 \usepackage{colortbl}
 \usepackage{xcolor}
-\usepackage{caption} % For customizing captions
+\usepackage{caption} % For customising captions
 
 
 % Set the caption font size
@@ -23,12 +23,23 @@
 
 \geometry{a4paper, left=25mm, right=25mm, top=25mm, bottom=25mm}
 \title{Project 1: Supervised Learning - Classification}
+
 \author{Alexander Svarfdal Gudmundsson \and Jan Babin}
 \date{\today}
 
 \begin{document}
 
 \maketitle
+
+\begin{center}  
+    \includegraphics[width=0.6\textwidth]{HR_logo.jpg}
+\end{center}
+
+\clearpage
+
+\tableofcontents
+
+\clearpage
 
 \section{Introduction}
 \subsection{Background}
@@ -171,7 +182,7 @@ In an effort to improve prediction accuracy, two ensemble learning methods were 
 \end{itemize} 
 
 \section{Results}
-For the results section, we primarily focused on evaluating different models' performances using accuracy, while also
+For the results section, we primarily focussed on evaluating different models' performances using accuracy, while also
 incorporating F1 score, recall, and precision. Accuracy was chosen as our main metric because it is a 
 straightforward measure that comprehensively includes all possible outcomes of the confusion matrix. 
 According to an article by Google \cite{Google}, accuracy serves as a robust quality estimate for balanced data sets.
@@ -200,6 +211,8 @@ on.
     Higher values indicate stronger correlations.}
     \label{fig:correlation_matrix}
 \end{figure}
+
+\clearpage
 
 \subsection{ClassificationExperiment}
 With this setup, PyCaret's \texttt{ClassificationExperiment} yielded the following results:
@@ -368,7 +381,7 @@ Although we tested feature selection methods, they did not improve our models; i
 Additionally, some of our models did not benefit from hyperparameter tuning, and the original versions of the models performed better. 
 There could be two main reasons for this:
 \begin{itemize}
-    \item The default hyperparameters were already optimized, making it difficult for the tuning process to find better values.
+    \item The default hyperparameters were already optimised, making it difficult for the tuning process to find better values.
     \item The hyperparameter tuning used a random grid search, and it is possible that the tuned parameters were not as effective as they could have been with a better search method like grid search.
 \end{itemize}
 
