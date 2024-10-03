@@ -99,6 +99,8 @@ the structure of the data:
     and \textit{PhysHlth}, while categorical variables included \textit{GenHlth} 
     (self-reported health scale from 1 to 5) and binary indicators for lifestyle factors like 
     smoking, physical activity, and alcohol consumption.
+    \item Cyclical values: None of your features were cyclical (e.g. month of the year where December and 
+    January numerically seem to be far apart, but actually are not)
 \end{itemize}
 
 \subsection{Preprocessing}
@@ -178,7 +180,7 @@ We also learnt that \texttt{ClassificationExperiment} takes care of preprocessin
 as needed for different models. Hence, we chose to omit manual scaling and let PyCaret take care of it.
 
 \subsection{Feature Correlation Analysis}
-The features \textit{GenHlth\_5.0} and \textit{PhysHlth} exhibited strong linear correlation ($r = 0.52 > 0.5$),
+The features \textit{GenHlth\_5.0} and \textit{PhysHlth} exhibited strong linear correlation ($r = 0.52 >= 0.5$),
 albeit on the lower end. Omitting \textit{GenHlth\_5.0}, however, decreased accuracy across our top 5 models,
 implying the degree of correlation was not high enough to outweigh having more features / data to train 
 on.
@@ -195,26 +197,28 @@ on.
 With this setup, PyCaret's \texttt{ClassificationExperiment} yielded the following results:
 
 \begin{table}[H]
-\centering
-\begin{tabular}{l l c c c c}
-\toprule
-\textbf{Model} & \textbf{Classifier} & \textbf{Accuracy} & \textbf{Recall} & \textbf{Precision} & \textbf{F1} \\
-\midrule
-\texttt{gbc} & Gradient Boosting Classifier & \cellcolor{yellow}0.7508 & 0.7897 & 0.7329 & \cellcolor{yellow}0.7601 \\
-\texttt{lightgbm} & Light Gradient Boosting Machine & 0.7495 & \cellcolor{yellow}0.7926 & 0.7298 & 0.7598 \\
-\texttt{ada} & Ada Boost Classifier & 0.7482 & 0.7731 & \cellcolor{yellow}0.7366 & 0.7543 \\
-\texttt{lr} & Logistic Regression & 0.7467 & 0.7737 & 0.7342 & 0.7534 \\
-\texttt{ridge} & Ridge Classifier & 0.7467 & 0.7799 & 0.7314 & 0.7549 \\
-\texttt{lda} & Linear Discriminant Analysis & 0.7467 & 0.7798 & 0.7314 & 0.7548 \\
-\texttt{rf} & Random Forest Classifier & 0.7273 & 0.7627 & 0.7124 & 0.7366 \\
-\texttt{nb} & Naive Bayes & 0.7246 & 0.7251 & 0.7244 & 0.7247 \\
-\texttt{et} & Extra Trees Classifier & 0.7108 & 0.7330 & 0.7019 & 0.7171 \\
-\texttt{knn} & K Neighbors Classifier & 0.7019 & 0.7196 & 0.6951 & 0.7071 \\
-\bottomrule
-\end{tabular}
-\caption{Performance of Top 10 Models after (sorted by accuracy, top scores [Accuracy, Recall, Precision, F1] highlighted)}
-\label{tab:model_performance}
-\end{table}
+    \centering
+    \begin{tabular}{l l c c c c}
+    \toprule
+    \textbf{Model} & \textbf{Classifier} & \textbf{Accuracy} & \textbf{Recall} & \textbf{Precision} & \textbf{F1} \\
+    \midrule
+    \texttt{gbc} & Gradient Boosting Classifier & \cellcolor{yellow}0.7508 & 0.7897 & 0.7329 & \cellcolor{yellow}0.7601 \\
+    \texttt{lightgbm} & Light Gradient Boosting Machine & 0.7495 & 0.7926 & 0.7298 & 0.7598 \\
+    \texttt{ada} & Ada Boost Classifier & 0.7482 & 0.7731 & \cellcolor{yellow}0.7366 & 0.7543 \\
+    \texttt{lr} & Logistic Regression & 0.7470 & 0.7743 & 0.7343 & 0.7537 \\
+    \texttt{lda} & Linear Discriminant Analysis & 0.7467 & 0.7798 & 0.7314 & 0.7548 \\
+    \texttt{ridge} & Ridge Classifier & 0.7465 & 0.7797 & 0.7312 & 0.7546 \\
+    \texttt{svm} & SVM - Linear Kernel & 0.7436 & \cellcolor{yellow}0.7991 & 0.7206 & 0.7567 \\
+    \texttt{rf} & Random Forest Classifier & 0.7268 & 0.7631 & 0.7117 & 0.7364 \\
+    \texttt{nb} & Naive Bayes & 0.7246 & 0.7251 & 0.7244 & 0.7247 \\
+    \texttt{et} & Extra Trees Classifier & 0.7111 & 0.7336 & 0.7022 & 0.7175 \\
+    \bottomrule
+    \end{tabular}
+    \caption{Performance of Top 10 Models (sorted by accuracy, top scores highlighted)}
+    \label{tab:model_performance}
+    \end{table}
+        
+    
 
 Our rudimentary feature selection analysis produced the following results:
 
@@ -224,21 +228,22 @@ Our rudimentary feature selection analysis produced the following results:
     \toprule
     \textbf{Model} & \textbf{Classifier} & \textbf{Accuracy} & \textbf{Recall} & \textbf{Precision} & \textbf{F1} \\
     \midrule
-    \texttt{gbc} & Gradient Boosting Classifier & \cellcolor{yellow}0.7302 & \cellcolor{yellow}0.7761 & 0.7109 & \cellcolor{yellow}0.7420 \\
-    \texttt{lightgbm} & Light Gradient Boosting Machine & 0.7302 & 0.7700 & 0.7133 & 0.7405 \\
-    \texttt{ada} & Ada Boost Classifier & 0.7299 & 0.7581 & 0.7178 & 0.7373 \\
-    \texttt{lr} & Logistic Regression & 0.7260 & 0.7350 & \cellcolor{yellow}0.7222 & 0.7284 \\
-    \texttt{ridge} & Ridge Classifier & 0.7258 & 0.7374 & 0.7209 & 0.7290 \\
-    \texttt{lda} & Linear Discriminant Analysis & 0.7258 & 0.7374 & 0.7209 & 0.7290 \\
-    \texttt{qda} & Quadratic Discriminant Analysis & 0.7250 & 0.7514 & 0.7139 & 0.7321 \\
-    \texttt{nb} & Naive Bayes & 0.7238 & 0.7382 & 0.7177 & 0.7277 \\
-    \texttt{rf} & Random Forest Classifier & 0.7231 & 0.7645 & 0.7062 & 0.7341 \\
-    \texttt{et} & Extra Trees Classifier & 0.7229 & 0.7530 & 0.7104 & 0.7310 \\
+    \texttt{gbc} & Gradient Boosting Classifier & \cellcolor{yellow}0.6986 & \cellcolor{yellow}0.7403 & 0.6834 & \cellcolor{yellow}0.7106 \\
+    \texttt{ada} & Ada Boost Classifier & 0.6974 & 0.7058 & 0.6943 & 0.6998 \\
+    \texttt{lightgbm} & Light Gradient Boosting Machine & 0.6962 & 0.7248 & 0.6857 & 0.7046 \\
+    \texttt{svm} & SVM - Linear Kernel & 0.6913 & 0.7110 & 0.6858 & 0.6964 \\
+    \texttt{lr} & Logistic Regression & 0.6902 & 0.6982 & 0.6872 & 0.6926 \\
+    \texttt{ridge} & Ridge Classifier & 0.6896 & 0.7000 & 0.6858 & 0.6927 \\
+    \texttt{lda} & Linear Discriminant Analysis & 0.6894 & 0.6992 & 0.6859 & 0.6924 \\
+    \texttt{rf} & Random Forest Classifier & 0.6676 & 0.6736 & 0.6657 & 0.6696 \\
+    \texttt{et} & Extra Trees Classifier & 0.6614 & 0.6431 & 0.6677 & 0.6551 \\
+    \texttt{qda} & Quadratic Discriminant Analysis & 0.6588 & 0.5318 & \cellcolor{yellow}0.7129 & 0.6091 \\
     \bottomrule
     \end{tabular}
-    \caption{Performance of Top 10 Models after feature selection (sorted by accuracy, top scores [Accuracy, Recall, Precision, F1] highlighted)}
+    \caption{Performance of Top 10 Models after feature selection (sorted by accuracy, top scores highlighted)}
     \label{tab:model_performance_fs}
 \end{table}
+
     
 As can be seen, feature selection affected the best performing models negatively, we therefore 
 proceeded keeping all features in the data.
@@ -251,14 +256,14 @@ After optimising the hyperparameters, the resulting scores of the five best mode
 \toprule
 \textbf{Model} & \textbf{Classifier} & \textbf{Accuracy} & \textbf{Recall} & \textbf{Precision} & \textbf{F1} \\
 \midrule
-\texttt{lightgbm} & Light Gradient Boosting Machine & \cellcolor{yellow}0.7515 & \cellcolor{yellow}0.7930 & 0.7336 & \cellcolor{yellow}0.7603 \\  % Tuned selected based on accuracy
 \texttt{gbc}    & Gradient Boosting Classifier & 0.7508 & 0.7897 & 0.7329 & 0.7601 \\  % Original selected based on accuracy
-\texttt{lr}     & Logistic Regression & 0.7499 & 0.7737 & 0.7342 & 0.7534 \\  % Tuned selected based on accuracy
-\texttt{ada}    & Ada Boost Classifier & 0.7482 & 0.7731 & \cellcolor{yellow}0.7366 & 0.7543 \\  % Original selected based on accuracy
-\texttt{ridge}  & Ridge Classifier & 0.7467 & 0.7799 & 0.7314 & 0.7549 \\  % Original selected based on accuracy
+\texttt{lightgbm} & Light Gradient Boosting Machine & 0.7507 & 0.7915 & 0.7319 & 0.7604 \\  % Tuned selected based on accuracy
+\texttt{ada} & Ada Boost Classifier & 0.7482 & 0.7731 & \cellcolor{yellow}0.7366 & 0.7543 \\ % Original selected based on accuracy
+\texttt{lr} & Logistic Regression & 0.7471 & 0.7741 & 0.7345 & 0.7537 \\  % Tuned selected based on accuracy
+\texttt{lda} & Linear Discriminant Analysis & 0.7467 & 0.7798 & 0.7314 & 0.7548 \\ % Original selected based on accuracy 
 \bottomrule
 \end{tabular}
-\caption{WE NEED TO CHECK IF THIS IS RIGHT Best Results of Top 5 Models (sorted by accuracy, top scores highlighted)}
+\caption{Best Results of Top 5 Models (sorted by accuracy, top scores highlighted)}
 \label{tab:best_model_performance}
 \end{table}
 
@@ -273,7 +278,7 @@ We ensembled the 5 best tuned models using blending:
     \toprule
     \textbf{Model} & \textbf{Accuracy} & \textbf{Recall} & \textbf{Precision} & \textbf{F1} \\
     \midrule
-    \texttt{Blended Model} & 0.7495 & 0.7783 & 0.7359 & 0.7565 \\
+    \texttt{Blended Model} & 0.7490 & 0.7779 & 0.7354 & 0.7560 \\
     \bottomrule
     \end{tabular}
     \caption{Blending Results (Mean Performance Metrics)}
