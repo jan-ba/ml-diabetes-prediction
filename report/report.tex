@@ -140,6 +140,9 @@ PyCaret’s built-in random grid-search was used to tune the hyperparameters of 
 optimising for accuracy. The random grid-search works by 
 randomly choosing a parameter value from a given (or a default) range. It then tries out different combinations
 of these random hyperparameters and chooses the best one based on accuracy.
+\\
+ADD SOMETHING ABOUT CROSS VALIDATION HERE (which should be performed by the ClassifciationExperiment)
+
 
 \subsubsection{Feature Selection}
 Some rudimentary feature selection was employed, using PyCaret's \texttt{ClassificationExperiment}'s inbuilt
@@ -160,7 +163,8 @@ In an effort to improve prediction accuracy, two ensemble learning methods were 
 \end{itemize} 
 
 \section{Results}
-SOME SORT OF INTRODUCTION NEEDS TO GO HERE I GUESS
+SOME SORT OF INTRODUCTION NEEDS TO GO HERE I GUESS - WE COULD BRIEFLY EXPLAIN THE SCORES WE PAID ATTENTION TO,
+THAT IS, ACCURACY, F1, ...
 
 \subsection{Preprocessing}
 One-hot encoding features, that were already binary but numerical did not make any difference in the model's
@@ -326,6 +330,8 @@ This was the best model we could find for our data.
 seems to get better results, check stuff he did
 
 address that most models did not benefit from tuning
+
+could have checked for correlation of features with target (like kaggle solution) and dropped little-correlated ones
 
 \clearpage
 
