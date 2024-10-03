@@ -359,30 +359,27 @@ Further improvement could possible be achieved through additional tuning of the 
 
 
 \section{Discussion and Future Work}
-
-While wrapping up this project, we compared our solution to other approaches on Kaggle, such as \href{https://www.kaggle.com/code/solafajobi/diabetes-perfect-prediction}{this one} using the same dataset. 
-We found that our model's performance, while reasonable, did not achieve the same high level as some of the best-performing solutions.
-
-One of the key differences is that other solutions implemented feature selection based on the correlation of the features to the target class (diabetes). 
-Although we tested feature selection methods, they did not improve our models; in fact, it caused a degradation in performance for the top models produced by \texttt{ClassificationExperiment}. 
-Additionally, some of our models did not benefit from hyperparameter tuning, and the original versions of the models performed better. 
-There could be two main reasons for this:
-\begin{itemize}
-    \item The default hyperparameters were already optimized, making it difficult for the tuning process to find better values.
-    \item The hyperparameter tuning used a random grid search, and it is possible that the tuned parameters were not as effective as they could have been with a better search method like grid search.
-\end{itemize}
+While wrapping up this project up we checked other solutions on Kaggle \href{https://www.kaggle.com/code/solafajobi/diabetes-perfect-prediction}{this one} using the same dataset. 
+We found that our score and model is not that good compared to others.
+Other solutions implemented feature selection based on correlation of the features to the target class diabetes. 
+We tested that out but found out that it made the top models from \texttt{ClassificationExperiment} perform worse.
+Furthermore, some of our models did not benefit from the hyperparameter tuning and the original models performed better.
+There are two reasons why that might be:
+    \begin{itemize}
+        \item The default values for the hyperparameters were already so good that the tuning did not manage to find any better ones.
+        \item Usage of random grid search for the hyperparameter tuning, its possible that a better search method like grid search would have been better, 
+        we tried to use grid search for the tuning but found out soon that we did not have the computational time or power to move forward with that. 
+    \end{itemize}
 
 \subsection{Future Work}
-
-While the current model performs decently, several avenues for improvement exist:
+The current model performs decently, there are some ways we could further improve it:
 \begin{itemize}
-    \item \textbf{Improved Feature Selection:} Future iterations of this project could explore more sophisticated feature selection methods.
-    \item \textbf{Advanced Hyperparameter Tuning:} Instead of random grid search, more robust techniques could be employed to find optimal hyperparameters.
-    \item \textbf{Model Interpretability:} Since the best model is an ensamble it might be hard to interperate it. It might be better to choose non ensambled model from the top tuned models for easier interpretability.
+    \item \textbf{Feature Selection:} We could have tried out more extravagant feature selection, used feature imporatnce and only take the most important ones into the model training.
+    \item \textbf{Hyperparameter Tuning:} Instead of using random grid search we could have used a better search method like grid search so get the absolut best parameters.
+    \item \textbf{Interpretability:} Because the best model is a ensamble it might be hard to interperat it. It might be better to choose non ensambled model from the top tuned models for easier Interpretability.
 \end{itemize}
 
-In conclusion, while our current approach demonstrates a reasonable performance, there is room for improvement. 
-By refining feature selection, applying advanced hyperparameter tuning techniques, future iterations of this project might yield better results.
+In conclusion, while the current model works decently, further improvements can be made by refining features and further tune some hyperparameters.
 
 
 \clearpage
