@@ -344,10 +344,9 @@ Blending performed better than stacking, the results are shown below:
 This was the best model we could find for our data.
 
 
-\subsection{Testing the Models with the Test Data}
+\subsection{Testing the best model}
 
-After training the ensemble model on the training dataset, the model was evaluated on both the 
-training and test data to measure its performance and generalisation capability. 
+When we were done training the best model on the training dataset, the model was evaluated on the test data.
 Table \ref{tab:accuracy_results} shows the accuracy results for both the training and test sets.
 
 \begin{table}[h]
@@ -364,16 +363,14 @@ Table \ref{tab:accuracy_results} shows the accuracy results for both the trainin
     \label{tab:accuracy_results}
 \end{table}
 
-The results indicate that the blended ensamble performs well both on the training and the test data. Since there is little to 
-no difference between the training and the test accuracy it means that the model is able to generalise well on unseen data. 
-Overfitting would imply that the model is learning the training data too closely, whitch seems not to the case for our model.
-The final test accuracy of 74.92\% is the best that we could do for this project. 
-Further improvement could possible be achieved through additional tuning of the hyperparameters or more indepth feature engineering.
-
+The results show that the blended ensamble performs well on the training and test data. 
+Since there is little to no difference between the training and the test accuracy it means that the model is able to generalise very well on unseen data, that also indicates that our model is not overfitting.
+Overfitting means that the model would be learning the training data too closely, but thats not the case for our model.
+The final test accuracy of 74.92\% is the best that we could do for this project.
 
 \section{Discussion and Future Work}
-While wrapping up this project up we checked other solutions on Kaggle \href{https://www.kaggle.com/code/solafajobi/diabetes-perfect-prediction}{this one} using the same dataset. 
-We found that our score and model is not that good compared to others.
+While wrapping up this project up we checked other solutions on Kaggle using the same dataset like \href{https://www.kaggle.com/code/solafajobi/diabetes-perfect-prediction}{this one}.
+We found that our accuracy score, other key metrics and the model as a whole is not that good in comparison to other models on the web.
 Other solutions implemented feature selection based on correlation of the features to the target class diabetes. 
 We tested that out but found out that it made the top models from \texttt{ClassificationExperiment} perform worse.
 Furthermore, some of our models did not benefit from the hyperparameter tuning and the original models performed better.
@@ -387,9 +384,9 @@ There are two reasons why that might be:
 \subsection{Future Work}
 The current model performs decently, there are some ways we could further improve it:
 \begin{itemize}
-    \item \textbf{Feature Selection:} We could have tried out more extravagant feature selection, used feature imporatnce and only take the most important ones into the model training.
-    \item \textbf{Hyperparameter Tuning:} Instead of using random grid search we could have used a better search method like grid search so get the absolut best parameters.
-    \item \textbf{Interpretability:} Because the best model is a ensamble it might be hard to interperat it. It might be better to choose non ensambled model from the top tuned models for easier Interpretability.
+    \item \textbf{Feature Selection:} We could have tried out more extravagant feature selection, using feature imporatnce and only take the most important ones into the model training.
+    \item \textbf{Hyperparameter Tuning:} Instead of using random grid search we could have used a better search method like grid search to get the better hyperparameters.
+    \item \textbf{Interpretability:} Because the best model is a ensamble it might be hard to interperate it. It might be better to choose non ensambled model from the top tuned models for easier interpretability.
 \end{itemize}
 
 In conclusion, while the current model works decently, further improvements can be made by refining features and further tune some hyperparameters.
