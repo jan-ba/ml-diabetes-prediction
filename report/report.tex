@@ -109,7 +109,7 @@ the structure of the data:
     and \textit{PhysHlth}, while categorical variables included \textit{GenHlth} 
     (self-reported health scale from 1 to 5) and binary indicators for lifestyle factors like 
     smoking, physical activity, and alcohol consumption.
-    \item Cyclical values: None of your features were cyclical (e.g. month of the year where December and 
+    \item Cyclical values: None of the features were cyclical (e.g. months of the year where December and 
     January seem to be far apart numerically, but actually are not).
 \end{itemize}
 
@@ -365,7 +365,7 @@ Table \ref{tab:accuracy_results} shows the accuracy results for both the trainin
 
 The results show that the blended ensamble performs well on the training and test data. 
 Since there is little to no difference between the training and the test accuracy it means that the model is able to generalise very well on unseen data, that also indicates that our model is not overfitting.
-Overfitting means that the model would be learning the training data too closely, but thats not the case for our model.
+Overfitting means that the model would be learning the training data too closely, but that is not the case for our model.
 The final test accuracy of 74.92\% is the best that we could do for this project.
 
 \section{Discussion and Future Work}
@@ -377,19 +377,21 @@ Furthermore, some of our models did not benefit from the hyperparameter tuning a
 There are two reasons why that might be:
     \begin{itemize}
         \item The default values for the hyperparameters were already so good that the tuning did not manage to find any better ones.
-        \item Usage of random grid search for the hyperparameter tuning, its possible that a better search method like grid search would have been better, 
-        we tried to use grid search for the tuning but found out soon that we did not have the computational time or power to move forward with that. 
+        \item Usage of random grid-search for the hyperparameter tuning: It is possible that a more robust search method 
+        like grid-search would have been better. However, when we tried to use grid search for the tuning we soon found out that 
+        we did not have computational power or time to move forward with that. 
     \end{itemize}
 
 \subsection{Future Work}
-The current model performs decently, there are some ways we could further improve it:
+Though the current model performs decently, there are some ways in which we could further improve it:
 \begin{itemize}
-    \item \textbf{Feature Selection:} We could have tried out more extravagant feature selection, using feature imporatnce and only take the most important ones into the model training.
-    \item \textbf{Hyperparameter Tuning:} Instead of using random grid search we could have used a better search method like grid search to get the better hyperparameters.
-    \item \textbf{Interpretability:} Because the best model is a ensamble it might be hard to interperate it. It might be better to choose non ensambled model from the top tuned models for easier interpretability.
+    \item \textbf{Feature Selection:} We could have tried out more sophisticated feature selection, using feature importance and only take the most important ones into the model training.
+    \item \textbf{Hyperparameter Tuning:} Instead of using random grid-search we could have used a more robust search method like grid-search to get better hyperparameters.
+    \item \textbf{Interpretability:} Because the best model is an ensamble it might be hard to interpret it. It might be better to choose a non-ensambled model from the top tuned models for easier interpretability.
 \end{itemize}
 
-In conclusion, while the current model works decently, further improvements can be made by refining features and further tune some hyperparameters.
+In conclusion, while the current model works decently, there is room for further improvements by refining features 
+and further tune some hyperparameters.
 
 
 \clearpage
