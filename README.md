@@ -1,56 +1,48 @@
-# T-504-ITML-Project-1
-
-
 # Diabetes Prediction Project
 
-This project is focused on predicting diabetes using machine learning models.
-Follow the instructions below to get started.
+This project focuses on predicting diabetes using machine learning models. It was developed as part of a university project by Alexander Svarfdal Guðmundsson and Jan Babin.
+
+## Project Overview
+
+- **Goal:** Build and evaluate machine learning models to predict diabetes based on health-related features.
+- **Tools Used:** Python, Pandas, Scikit-learn, PyCaret, Matplotlib, Seaborn.
+
+## Features
+
+- **Data Preprocessing:** Scaling, encoding, and correlation analysis.
+- **Model Training:** Comparison of multiple classification algorithms using PyCaret.
+- **Ensembling:** Implemented stacking and blending for improved accuracy.
+
+## Dataset
+
+The dataset, "Diabetes, Hypertension and Stroke Prediction," was sourced from Kaggle. It includes demographic and lifestyle indicators.
+
+- [Kaggle Dataset Link](https://www.kaggle.com/datasets/prosperchuks/health-dataset/data)
 
 ## Getting Started
 
 ### Prerequisites
-- Python 3.8, 3.9, 3.10, or 3.11 (at this time PyCaret is **not** fully yet supported on Python 3.12)
-- Virtual environment setup tools (`venv` or `virtualenv`)
-- Homebrew (for macOS users)
 
-### Setup Instructions
+- Python 3.8 - 3.11  
+- Required libraries listed in `requirements.txt`.
 
-1. **Create a Virtual Environment:**
-    #### Create a virtual environment in the project directory:
+### Installation
+
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/your-username/public-repo.git
+   cd public-repo
+
+2. Create and activate a virtual environment:
     ```bash
     python -m venv .venv
-    ```
+    source .venv/bin/activate  # macOS/Linux
+    .venv\Scripts\activate     # Windows
 
-2. **Activate the Virtual Environment:**
-    
-    On macOS/Linux:
-    ```bash
-    source .venv/bin/activate
-    ```
-    
-    On Windows:
-    ```bash
-    .venv\Scripts\activate
-    ```
+3. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
 
-3. **Install Required Dependencies:**
+### Run the Project
 
-    Install all the necessary packages from requirements.txt:
-    ```bash
-    pip install -r requirements.txt
-    ```
-4. **Run the Project:**
-
-    Once the environment is set up, run your code:
-    ```bash
-    python predict_diabetes.ipynb
-    ```
-
-## Known Issues
-While trying to run this project we stumbled on an issue with libomp (https://openmp.llvm.org) on macos. The error surficed while trying to run the machine learning models in PyCaret (e.g., issues related to OpenMP). The issue was solved by installing libomp via homebrew:
-
-```bash
-brew install libomp
-````
-
-Hopefully this helps if you encounter the same issue.
+Open the predict_diabetes.ipynb Jupyter Notebook to run the project step-by-step.
